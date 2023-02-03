@@ -3,23 +3,98 @@
 # Add steps that build, run tests, deploy, and more:
 # https://aka.ms/yaml
 
+# trigger:
+# - main
+
+# pool:
+#   vmImage: 'windows-latest'
+
+# variables:
+#   BuildConfiguration: 'Release'
+
+# steps:
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: build
+#     projects: '**/*.csproj'
+#     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+
+# - task: PublishBuildArtifacts@1
+#   inputs:
+#     pathToPublish: '$(Build.ArtifactStagingDirectory)'
+#     artifactName: 'drop'
+##===============================================
+
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
 trigger:
-- main
+  - main
+  
+  pool:
+    vmImage: 'windows-latest'
+  
+  variables:
+    BuildConfiguration: 'Release'
+  
+  steps:
+  
+  # - task: GitCheckout@2
+  #   inputs:
+  #     repository: 'https://dev.azure.com/oluseunismaila/Daniel/_git/dotnetapp1'
+  
+  - task: UseDotNet@2
+    displayName: 'Use .NET Core 6'
+    inputs:
+      version: 6.0.x
+  
+  - task: DotNetCoreCLI@0
+    displayName: Restore
+    inputs:
+      command: restore
+      projects: 'https://dev.azure.com/oluseunismaila/Daniel/_git/dotnetapp1/*.csproj'
+  
+  - task: DotNetCoreCLI@0
+    inputs:
+      command: build
+      # projects: '**/*.csproj'
+      # projects: 'https://dev.azure.com/oluseunismaila/Daniel/_git/dotnetapp1/**/*.csproj,https://dev.azure.com/oluseunismaila/Daniel/_git/dotnetapp2/**/*.csproj,https://dev.azure.com/oluseunismaila/Daniel/_git/dotnetapp3/**/*.csproj,https://dev.azure.com/oluseunismaila/Daniel/_git/dotnetapp4/**/*.csproj'
+      projects: 'https://dev.azure.com/oluseunismaila/Daniel/_git/dotnetapp1/*.csproj'
+      arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+  # - task: DotNetCoreCLI@2
+  #   inputs:
+  #     command: build
+  #     # projects: '**/*.csproj'
+  #     projects: '$(System.DefaultWorkingDirectory)/dotnetapp2/**/*.csproj'
+  #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+  
+  # - task: DotNetCoreCLI@2
+  #   inputs:
+  #     command: build
+  #     # projects: '**/*.csproj'
+  #     projects: '$(System.DefaultWorkingDirectory)/dotnetapp3/**/*.csproj'
+  #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+  
+  # - task: DotNetCoreCLI@2
+  #   inputs:
+  #     command: build
+  #     # projects: '**/*.csproj'
+  #     projects: '$(System.DefaultWorkingDirectory)/dotnetapp4/**/*.csproj'
+  #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+  
+  
+  
+  
+  
+  # - task: PublishBuildArtifacts@1
+  #   inputs:
+  #     pathToPublish: '$(Build.ArtifactStagingDirectory)'
+  #     artifactName: 'drop'
+  
 
-pool:
-  vmImage: 'windows-latest'
 
-variables:
-  BuildConfiguration: 'Release'
 
-steps:
-- task: DotNetCoreCLI@2
-  inputs:
-    command: build
-    projects: '**/*.csproj'
-    arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
 
-- task: PublishBuildArtifacts@1
-  inputs:
-    pathToPublish: '$(Build.ArtifactStagingDirectory)'
-    artifactName: 'drop'
+##==================================================
